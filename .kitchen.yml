@@ -1,0 +1,24 @@
+---
+driver:
+  name: ec2
+  associate_public_ip: true
+  require_chef_omnibus: true
+
+transport:
+  username: ec2-user
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: AmazonLinux-201807
+    driver:
+      image_id: ami-2a69be4c
+
+suites:
+  - name: default
+    run_list:
+      - recipe[aws-opsworks-cookbooks::default]
+      - recipe[aws-opsworks-cookbooks::timezone]
+      - recipe[aws-opsworks-cookbooks::configure-php56]
+    attributes:

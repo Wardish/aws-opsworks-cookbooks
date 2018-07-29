@@ -26,10 +26,12 @@ when "amazon"
       group 'root'
       mode 0644
     end
-    execute 'update' do
-      command '/usr/sbin/tzdata-update'
-      action :nothing
-      only_if { ::File.executable?('/usr/sbin/tzdata-update') }
+    script "update-tz" do
+      interpreter "bash"
+      user "root"
+      code <<-"EOS"
+        cp /usr/share/zoneinfo/#{node[:tz]} /etc/localtime
+      EOS
     end
   end
 end

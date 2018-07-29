@@ -1,4 +1,9 @@
 SetEnv BASE_DIR /<%= @document_root %>
+
+<% @ci_params.each do |name, value| %>
+SetEnv <%= "#{name}" %> "<%= "#{value}" %>"
+<% end %>
+
 RewriteEngine on
 RewriteBase /<%= @document_root %>
 RewriteCond $1 !^(index\.php|assets|robots\.txt)

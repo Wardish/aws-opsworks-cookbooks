@@ -1,7 +1,9 @@
-default["package"]["install"] = ["httpd24","php56","php56-mbstring","php56-common","php56-pdo","php56-xml"]
+default["package"]["install"] = ["httpd24","php71","php71-mbstring","php71-common","php71-pdo","php71-xml","php71-pgsql","postgresql96-server"]
 default["tz"] = "Asia/Tokyo"
 default["application"]["database_location"] = "localhost"
 default["application"]["database"]["host"] = "localhost"
 default["application"]["database"]["username"] = ""
 default["application"]["database"]["password"] = ""
 default["application"]["database"]["database"] = ""
+
+default["service"]["on"] = ["httpd","postgresql96"]

@@ -1,0 +1,7 @@
+DEPENDENCIES
+  aws-opsworks-cookbooks
+    path: .
+    metadata: true
+
+GRAPH
+  aws-opsworks-cookbooks (0.1.0)

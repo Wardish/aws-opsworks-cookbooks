@@ -1,0 +1,5 @@
+SetEnv BASE_DIR /<%= @document_root %>
+RewriteEngine on
+RewriteBase /<%= @document_root %>
+RewriteCond $1 !^(index\.php|assets|robots\.txt)
+RewriteRule ^(.*)$ index.php/$1 [L]

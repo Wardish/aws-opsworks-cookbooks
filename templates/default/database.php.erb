@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn'   => '',
-    'hostname' => <%= (@database[:host] || 'localhost').to_s.inspect %>,
-    'username' => <%= @database[:username].to_s.inspect %>,
-    'password' => <%= @database[:password].to_s.inspect %>,
-    'database' => <%= @database[:database].to_s.inspect %>,
+    'hostname' => <%= (@database_host || 'localhost').to_s.inspect %>,
+    'username' => <%= @database_user.to_s.inspect %>,
+    'password' => <%= @database_password.to_s.inspect %>,
+    'database' => <%= @database_name.to_s.inspect %>,
     'dbdriver' => 'postgre',
     'dbprefix' => '',
     'pconnect' => FALSE,

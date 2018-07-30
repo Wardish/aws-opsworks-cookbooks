@@ -20,5 +20,15 @@ suites:
     run_list:
       - recipe[aws-opsworks-cookbooks::default]
       - recipe[aws-opsworks-cookbooks::timezone]
-      - recipe[aws-opsworks-cookbooks::configure-php56]
+      - recipe[aws-opsworks-cookbooks::setup-php56]
+      - recipe[aws-opsworks-cookbooks::setup-postgresql96]
+      - recipe[aws-opsworks-cookbooks::setup-services]
+      - recipe[aws-opsworks-cookbooks::test-dmp]
+      - recipe[aws-opsworks-cookbooks::configure-httpd]
+      - recipe[aws-opsworks-cookbooks::configure-database]
+      - recipe[aws-opsworks-cookbooks::deploy]
+
+    data_bugs_path: "test/integration/default/data_bags"
     attributes:
+    
+

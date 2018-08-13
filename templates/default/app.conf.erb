@@ -1,8 +1,20 @@
-Alias /<%= @document_root %>/ /var/www/apps/<%= @shortname %>/modules/<%= @name %>/public/
+Alias /<%= @document_root %>/ <%= @base_dir %>
 
 DirectoryIndex index.php index.html
 
-<Directory /var/www/apps/<%= @shortname %>/modules/<%= @name %>/public/>
+
+<Directory <%= @base_dir %> >
+	SetEnv BASE_DIR /<%= @document_root %>
+
+	<% @ci_params.each do |name, value| %>
+	SetEnv <%= "#{name}" %> "<%= "#{value}" %>"
+	<% end %>
+
+	<% @wp_params.each do |name, value| %>
+	SetEnv <%= "#{name}" %> "<%= "#{value}" %>"
+	<% end %>
+
+
     AllowOverride All
     EnableMMAP Off
     EnableSendfile Off

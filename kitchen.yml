@@ -1,0 +1,43 @@
+---
+driver:
+  name: ec2
+  associate_public_ip: true
+  require_chef_omnibus: true
+  shared_credentials_profile: default
+  aws_ssh_key_id: wardish-service-keypair
+  region: ap-northeast-1
+  subnet_id: subnet-87da59f1
+  security_group_ids: ["sg-e3c40d84"]
+  availability_zone: ap-northeast-1b
+
+transport:
+  username: ec2-user
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: AmazonLinux-2018.03
+    driver:
+      image_id: ami-449f483b
+      user_name: ec2-user
+
+suites:
+  - name: default
+    run_list:
+      - recipe[aws-opsworks-cookbooks::install-packages]
+      - recipe[aws-opsworks-cookbooks::install-composer]
+      - recipe[aws-opsworks-cookbooks::configure-php]
+      - recipe[aws-opsworks-cookbooks::configure-postgresql96]
+      - recipe[aws-opsworks-cookbooks::configure-services]
+      - recipe[aws-opsworks-cookbooks::download-source]
+      - recipe[aws-opsworks-cookbooks::create-database-on-local]
+      - recipe[aws-opsworks-cookbooks::build]
+      - recipe[aws-opsworks-cookbooks::deploy-webapp]
+      - recipe[aws-opsworks-cookbooks::compat-replace-database-conf]
+      - recipe[aws-opsworks-cookbooks::migrate]
+
+    data_bugs_path: "test/integration/default/data_bags"
+    attributes:
+
+

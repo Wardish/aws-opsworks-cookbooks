@@ -8,6 +8,7 @@ script "setup-postgresql96" do
 end
 
 template "/var/lib/pgsql96/data/pg_hba.conf" do
+  only_if "test -f /var/lib/pgsql96/data/pg_hba.conf"
   source 'pg_hba.conf.erb'
   owner 'postgres'
   group 'postgres'

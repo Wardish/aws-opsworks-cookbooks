@@ -6,9 +6,7 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     interpreter "bash"
     only_if "test -d /var/www/apps/#{app[:shortname]}/application"
     code <<-"EOS"
-      cd "/var/www/apps/#{app[:shortname]}"
-      /usr/bin/php public/index.php migrate latest
+      curl http://localhost/#{app[:shortname]}/migrate/latest
     EOS
   end
 end
-

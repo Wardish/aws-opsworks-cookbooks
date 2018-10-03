@@ -24,14 +24,6 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     EOS
   end
 
-  script "owner-change" do
-    user "root"
-    interpreter "bash"
-    code <<-"EOS"
-      chown -R apache:apache /var/www/apps/#{app[:shortname]}
-    EOS
-  end
-
   data_source = app[:data_sources].first
   if "RdsDbInstance" == data_source[:type] then
     arn = "#{data_source[:arn]}".gsub(/:/, '\:')
@@ -46,6 +38,25 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     app[:environment][:CI_DB_USER] = rds_setting[:db_user]
     app[:environment][:CI_DB_PASSWORD] = rds_setting[:db_password]
     app[:environment][:CI_DB_HOST] = rds_setting[:address]
+  end
+
+  template "/var/www/apps/#{app[:shortname]}/#{app[:environment][:CI_PUBLIC]}/.htaccess" do
+    only_if "test -d /var/www/apps/#{app[:shortname]}/#{app[:environment][:CI_PUBLIC]}/"
+    source "htaccess.erb"
+    mode "0660"
+    group "ec2-user"
+    owner "ec2-user"
+    variables({
+        :document_root => app[:attributes][:document_root],
+    })
+  end
+
+  script "owner-change" do
+    user "root"
+    interpreter "bash"
+    code <<-"EOS"
+      chown -R apache:apache /var/www/apps/#{app[:shortname]}
+    EOS
   end
 
   template "/etc/httpd/conf.d/#{app[:shortname]}.conf" do

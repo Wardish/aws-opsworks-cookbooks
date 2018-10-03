@@ -13,13 +13,13 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
   end
 
   module_path = app[:environment][:module_path] ? app[:environment][:module_path] : "/"
-  module_path = ! module_path.end_with?("/") || "${module_path}/"
+  module_path = ! module_path.end_with?("/") || module_path
 
   script "app-release" do
     user "root"
     interpreter "bash"
     code <<-"EOS"
-      /usr/bin/rsync -a --delete /opt/apps/#{app[:shortname]}#{module_path} /var/www/apps/#{app[:shortname]}/
+      /usr/bin/rsync -a --delete /opt/build/#{app[:shortname]}#{module_path} /var/www/apps/#{app[:shortname]}/
       chown -R ec2-user /var/www/apps/#{app[:shortname]}
     EOS
   end

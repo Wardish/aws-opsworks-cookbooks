@@ -8,7 +8,7 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     interpreter "bash"
     code <<-"EOS"
       mkdir -p /var/www/apps
-      cd "/opt/build/#{app[:shortname]}"
+      cd "/opt/apps/#{app[:shortname]}"
       rsync -a .#{module_path} /var/www/apps/#{app[:shortname]}/
     EOS
   end

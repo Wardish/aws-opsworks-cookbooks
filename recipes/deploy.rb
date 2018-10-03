@@ -12,8 +12,9 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     action [:stop]
   end
 
-  module_path = app[:environment][:module_name] ? app[:environment][:module_name] : "/"
-
+  module_path = app[:environment][:module_path] ? app[:environment][:module_path] : "/"
+  module_path = ! module_path.end_with?("/") || "${module_path}/"
+  
   script "app-release" do
     user "root"
     interpreter "bash"
@@ -37,8 +38,11 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     group "apache"
     owner "apache"
     variables({
-        :base_dir => "/var/www/apps/#{app[:shortname]}#{module_path}",
-        :document_root => app[:attributes][:document_root]
+        :base_dir => "/var/www/apps/#{app[:shortname]}/",
+        :public_dir => "/var/www/apps/#{app[:shortname]}/${app[:environment][:CI_PUBLIC]}/",
+        :document_root => app[:attributes][:document_root],
+        :ci_params => app[:environment].select {|key, val| key.start_with?("CI_")},
+        :wp_params => app[:environment].select {|key, val| key.start_with?("WP_")}
         })
   end
 

@@ -13,15 +13,14 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     EOS
   end
 
-  template "/var/www/apps/#{app[:shortname]}#{module_path}public/.htaccess" do
-    only_if "test -f /var/www/apps/#{app[:shortname]}#{module_path}public/.htaccess"
+  template "/var/www/apps/#{app[:shortname]}/#{app[:environment][:CI_PUBLIC]}/.htaccess" do
+    only_if "test -f /var/www/apps/#{app[:shortname]}/#{app[:environment][:CI_PUBLIC]}/.htaccess"
     source "htaccess.erb"
     mode "0660"
     group "ec2-user"
     owner "ec2-user"
     variables({
         :document_root => app[:attributes][:document_root],
-        :ci_params => app[:environment].select {|key, val| key.start_with?("CI_")}
     })
   end
 
@@ -42,6 +41,11 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     app[:environment][:WP_DB_USER] = rds_setting[:db_user]
     app[:environment][:WP_DB_PASSWORD] = rds_setting[:db_password]
     app[:environment][:WP_DB_HOST] = rds_setting[:address]
+
+    app[:environment][:CI_DB_NAME] = data_source[:database_name]
+    app[:environment][:CI_DB_USER] = rds_setting[:db_user]
+    app[:environment][:CI_DB_PASSWORD] = rds_setting[:db_password]
+    app[:environment][:CI_DB_HOST] = rds_setting[:address]
   end
 
   template "/etc/httpd/conf.d/#{app[:shortname]}.conf" do

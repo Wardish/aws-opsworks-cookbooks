@@ -55,7 +55,7 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     owner "apache"
     variables({
         :base_dir => "/var/www/apps/#{app[:shortname]}/",
-        :public_dir => "/var/www/apps/#{app[:shortname]}/${app[:environment][:CI_PUBLIC]}/",
+        :public_dir => "/var/www/apps/#{app[:shortname]}/#{app[:environment][:CI_PUBLIC]}/",
         :document_root => app[:attributes][:document_root],
         :ci_params => app[:environment].select {|key, val| key.start_with?("CI_")},
         :wp_params => app[:environment].select {|key, val| key.start_with?("WP_")}

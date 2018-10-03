@@ -14,7 +14,7 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
 
   module_path = app[:environment][:module_path] ? app[:environment][:module_path] : "/"
   module_path = ! module_path.end_with?("/") || "${module_path}/"
-  
+
   script "app-release" do
     user "root"
     interpreter "bash"
@@ -30,6 +30,22 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     code <<-"EOS"
       chown -R apache:apache /var/www/apps/#{app[:shortname]}
     EOS
+  end
+
+  data_source = app[:data_sources].first
+  if "RdsDbInstance" == data_source[:type] then
+    arn = "#{data_source[:arn]}".gsub(/:/, '\:')
+    Chef::Log.info("RDS DB Instance #{arn}")
+    rds_setting = search("aws_opsworks_rds_db_instance", "rds_db_instance_arn:#{arn}").first
+    app[:environment][:WP_DB_NAME] = data_source[:database_name]
+    app[:environment][:WP_DB_USER] = rds_setting[:db_user]
+    app[:environment][:WP_DB_PASSWORD] = rds_setting[:db_password]
+    app[:environment][:WP_DB_HOST] = rds_setting[:address]
+
+    app[:environment][:CI_DB_NAME] = data_source[:database_name]
+    app[:environment][:CI_DB_USER] = rds_setting[:db_user]
+    app[:environment][:CI_DB_PASSWORD] = rds_setting[:db_password]
+    app[:environment][:CI_DB_HOST] = rds_setting[:address]
   end
 
   template "/etc/httpd/conf.d/#{app[:shortname]}.conf" do

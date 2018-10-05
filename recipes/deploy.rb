@@ -73,6 +73,14 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
         })
   end
 
+  script "run-install-script" do
+    user "root"
+    interpreter "bash"
+    code <<-"EOS"
+      /var/www/apps/#{app[:shortname]}/install.sh
+    EOS
+  end
+
   service "httpd" do
     action [:start]
   end

@@ -77,7 +77,7 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     user "root"
     interpreter "bash"
     code <<-"EOS"
-      /var/www/apps/#{app[:shortname]}/install.sh
+      sh /var/www/apps/#{app[:shortname]}/install.sh
     EOS
   end
 

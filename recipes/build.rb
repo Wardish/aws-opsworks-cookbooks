@@ -13,7 +13,7 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
   end
 
   script "app-build" do
-    user "ec2-user"
+    user "root"
     interpreter "bash"
     code <<-"EOS"
       cd "/opt/build/#{app[:shortname]}"

@@ -12,6 +12,17 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     EOS
   end
 
+  if app[:environment].has_key?(:github_token) then
+    script "token-for-composer" do
+      user "root"
+      interpreter "bash"
+      code <<-"EOS"
+        /usr/local/bin/composer config -g github-oauth.github.com #{app[:environment][:github_token]}
+      EOS
+    end
+  end
+
+
   script "app-build" do
     user "root"
     interpreter "bash"

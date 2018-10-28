@@ -1,0 +1,5 @@
+#!/bin/sh
+
+file=$1
+curl -X POST https://content.dropboxapi.com/2/files/upload --header "Authorization: Bearer <%= @dropbox_token %>" --header "Dropbox-API-Arg: {\"path\": \"/data/$file\", \"mode\": \"overwrite\"}" --header "Content-Type: application/octet-stream" --data-binary @$file
+echo ""

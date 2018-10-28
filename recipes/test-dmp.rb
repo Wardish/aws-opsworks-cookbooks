@@ -1,3 +1,5 @@
+require 'json'
+
 %w(aws_opsworks_app
    aws_opsworks_command
    aws_opsworks_ecs_cluster
@@ -11,9 +13,7 @@
   puts "### #{data_bag} ###"
   search(data_bag).each_with_index do |app, i|
     puts "===== #{i} ====="
-    app.each do |key, value|
-      puts "\"#{key}\": #{value}"
-    end
+    puts JSON.pretty_generate(app)
   end
   puts '--------------------'
 end

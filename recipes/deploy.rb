@@ -29,10 +29,10 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
     arn = "#{data_source[:arn]}".gsub(/:/, '\:')
     Chef::Log.info("RDS DB Instance #{arn}")
     rds_setting = search("aws_opsworks_rds_db_instance", "rds_db_instance_arn:#{arn}").first
-    app[:environment][:WP_DB_NAME] = data_source[:database_name]
-    app[:environment][:WP_DB_USER] = rds_setting[:db_user]
-    app[:environment][:WP_DB_PASSWORD] = rds_setting[:db_password]
-    app[:environment][:WP_DB_HOST] = rds_setting[:address]
+    app[:environment][:WP_DB_NAME] = data_source[:database_name] if app[:environment].has_key?(:WP_DB_NAME)
+    app[:environment][:WP_DB_USER] = rds_setting[:db_user] if app[:environment].has_key?(:WP_DB_USER)
+    app[:environment][:WP_DB_PASSWORD] = rds_setting[:db_password] if app[:environment].has_key?(:WP_DB_PASSWORD)
+    app[:environment][:WP_DB_HOST] = rds_setting[:address] if app[:environment].has_key?(:WP_DB_HOST)
 
     app[:environment][:CI_DB_NAME] = data_source[:database_name]
     app[:environment][:CI_DB_USER] = rds_setting[:db_user]

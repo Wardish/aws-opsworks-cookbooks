@@ -38,9 +38,9 @@ $cmd -c "\\dt" | grep tb_ | grep -v hist | awk '{print $3}'> "#{data_source[:dat
 for tb in `cat #{data_source[:database_name]}/tables`; do $cmd -c "COPY $tb TO stdout WITH CSV delimiter E'\\t' FORCE quote * NULL AS '' HEADER" > "#{data_source[:database_name]}"/$tb.txt; done
 
 
-# for file in `find #{data_source[:database_name]} -type f | grep txt`; do
-#   sh ./dropbox_upload.sh $file
-# done
+for file in `find #{data_source[:database_name]} -type f | grep txt`; do
+  sh ./dropbox_upload.sh $file
+done
 
 rm -f *.txt
       EOS

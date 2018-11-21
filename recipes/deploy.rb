@@ -76,6 +76,7 @@ search("aws_opsworks_app", "deploy:true").each_with_index do |app, i|
   script "run-install-script" do
     user "root"
     interpreter "bash"
+    environment app[:environment]
     only_if "test -f /var/www/apps/#{app[:shortname]}/install.sh"
     code <<-"EOS"
       sh /var/www/apps/#{app[:shortname]}/install.sh
